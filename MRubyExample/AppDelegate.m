@@ -103,7 +103,7 @@
     
     MRuby *mruby = [MRuby mruby];
     @try {
-        MRubyValue *fizzBuzz = fizzBuzz = [[[mruby eval:@"1..20"] send:@"map" blocks:^NSObject *(MRubyValue *i) {
+        MRubyValue *fizzBuzz = [[[mruby eval:@"1..20"] send:@"map" blocks:^NSObject *(MRubyValue *i) {
             return [i eval:@"i=self;i%3<1&&x=:Fizz;i%5<1?\"#{x}Buzz\":x||i"];
         }] send:@"map" proc:[mruby eval:@":to_s"]];
         
