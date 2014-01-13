@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D54C30B618840765009DAC50 /* fizzbuzz.rb in Resources */ = {isa = PBXBuildFile; fileRef = D54C30B518840765009DAC50 /* fizzbuzz.rb */; };
 		D5BFF88C18836A6B001E74BA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5BFF88B18836A6B001E74BA /* Cocoa.framework */; };
 		D5BFF89618836A6C001E74BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5BFF89418836A6C001E74BA /* InfoPlist.strings */; };
 		D5BFF89818836A6C001E74BA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D5BFF89718836A6C001E74BA /* main.m */; };
@@ -18,6 +19,11 @@
 		D5BFF8AC18836A6C001E74BA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5BFF88B18836A6B001E74BA /* Cocoa.framework */; };
 		D5BFF8B418836A6C001E74BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5BFF8B218836A6C001E74BA /* InfoPlist.strings */; };
 		D5BFF8B618836A6C001E74BA /* MRubyExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D5BFF8B518836A6C001E74BA /* MRubyExampleTests.m */; };
+		D5BFF8C018836DB2001E74BA /* libmruby.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5BFF8BF18836DB2001E74BA /* libmruby.a */; };
+		D5BFF8CA18837104001E74BA /* MRuby.m in Sources */ = {isa = PBXBuildFile; fileRef = D5BFF8C618837104001E74BA /* MRuby.m */; };
+		D5BFF8CB18837104001E74BA /* MRubyBlockInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D5BFF8C718837104001E74BA /* MRubyBlockInfo.m */; };
+		D5BFF8CC18837104001E74BA /* MRubyUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D5BFF8C818837104001E74BA /* MRubyUtil.m */; };
+		D5BFF8CD18837104001E74BA /* MRubyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = D5BFF8C918837104001E74BA /* MRubyValue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D54C30B518840765009DAC50 /* fizzbuzz.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = fizzbuzz.rb; sourceTree = "<group>"; };
 		D5BFF88818836A6B001E74BA /* MRubyExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MRubyExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5BFF88B18836A6B001E74BA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D5BFF88E18836A6C001E74BA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -50,6 +57,15 @@
 		D5BFF8B118836A6C001E74BA /* MRubyExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MRubyExampleTests-Info.plist"; sourceTree = "<group>"; };
 		D5BFF8B318836A6C001E74BA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D5BFF8B518836A6C001E74BA /* MRubyExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MRubyExampleTests.m; sourceTree = "<group>"; };
+		D5BFF8BF18836DB2001E74BA /* libmruby.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmruby.a; path = mruby/build/host/lib/libmruby.a; sourceTree = "<group>"; };
+		D5BFF8C618837104001E74BA /* MRuby.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRuby.m; sourceTree = "<group>"; };
+		D5BFF8C718837104001E74BA /* MRubyBlockInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRubyBlockInfo.m; sourceTree = "<group>"; };
+		D5BFF8C818837104001E74BA /* MRubyUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRubyUtil.m; sourceTree = "<group>"; };
+		D5BFF8C918837104001E74BA /* MRubyValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRubyValue.m; sourceTree = "<group>"; };
+		D5BFF8CF1883710E001E74BA /* MRuby.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRuby.h; sourceTree = "<group>"; };
+		D5BFF8D01883710E001E74BA /* MRubyBlockInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRubyBlockInfo.h; sourceTree = "<group>"; };
+		D5BFF8D11883710E001E74BA /* MRubyUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRubyUtil.h; sourceTree = "<group>"; };
+		D5BFF8D21883710E001E74BA /* MRubyValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRubyValue.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +74,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5BFF88C18836A6B001E74BA /* Cocoa.framework in Frameworks */,
+				D5BFF8C018836DB2001E74BA /* libmruby.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +94,8 @@
 			isa = PBXGroup;
 			children = (
 				D5BFF89118836A6C001E74BA /* MRubyExample */,
+				D5BFF8C518837104001E74BA /* src */,
+				D5BFF8CE1883710E001E74BA /* include */,
 				D5BFF8AF18836A6C001E74BA /* MRubyExampleTests */,
 				D5BFF88A18836A6B001E74BA /* Frameworks */,
 				D5BFF88918836A6B001E74BA /* Products */,
@@ -98,6 +117,7 @@
 				D5BFF88B18836A6B001E74BA /* Cocoa.framework */,
 				D5BFF8AA18836A6C001E74BA /* XCTest.framework */,
 				D5BFF88D18836A6C001E74BA /* Other Frameworks */,
+				D5BFF8BF18836DB2001E74BA /* libmruby.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -132,6 +152,7 @@
 				D5BFF89718836A6C001E74BA /* main.m */,
 				D5BFF89918836A6C001E74BA /* MRubyExample-Prefix.pch */,
 				D5BFF89A18836A6C001E74BA /* Credits.rtf */,
+				D54C30B518840765009DAC50 /* fizzbuzz.rb */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -152,6 +173,28 @@
 				D5BFF8B218836A6C001E74BA /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D5BFF8C518837104001E74BA /* src */ = {
+			isa = PBXGroup;
+			children = (
+				D5BFF8C618837104001E74BA /* MRuby.m */,
+				D5BFF8C918837104001E74BA /* MRubyValue.m */,
+				D5BFF8C818837104001E74BA /* MRubyUtil.m */,
+				D5BFF8C718837104001E74BA /* MRubyBlockInfo.m */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		D5BFF8CE1883710E001E74BA /* include */ = {
+			isa = PBXGroup;
+			children = (
+				D5BFF8CF1883710E001E74BA /* MRuby.h */,
+				D5BFF8D21883710E001E74BA /* MRubyValue.h */,
+				D5BFF8D11883710E001E74BA /* MRubyUtil.h */,
+				D5BFF8D01883710E001E74BA /* MRubyBlockInfo.h */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,6 +274,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5BFF89618836A6C001E74BA /* InfoPlist.strings in Resources */,
+				D54C30B618840765009DAC50 /* fizzbuzz.rb in Resources */,
 				D5BFF8A418836A6C001E74BA /* Images.xcassets in Resources */,
 				D5BFF89C18836A6C001E74BA /* Credits.rtf in Resources */,
 				D5BFF8A218836A6C001E74BA /* MainMenu.xib in Resources */,
@@ -252,8 +296,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5BFF8CA18837104001E74BA /* MRuby.m in Sources */,
+				D5BFF8CD18837104001E74BA /* MRubyValue.m in Sources */,
+				D5BFF8CB18837104001E74BA /* MRubyBlockInfo.m in Sources */,
 				D5BFF89F18836A6C001E74BA /* AppDelegate.m in Sources */,
 				D5BFF89818836A6C001E74BA /* main.m in Sources */,
+				D5BFF8CC18837104001E74BA /* MRubyUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,7 +434,17 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MRubyExample/MRubyExample-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/mruby/include",
+					"$(PROJECT_DIR)/include",
+				);
 				INFOPLIST_FILE = "MRubyExample/MRubyExample-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/mruby/build/host/lib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -399,7 +457,17 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MRubyExample/MRubyExample-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/mruby/include",
+					"$(PROJECT_DIR)/include",
+				);
 				INFOPLIST_FILE = "MRubyExample/MRubyExample-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/mruby/build/host/lib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -464,6 +532,7 @@
 				D5BFF8BB18836A6C001E74BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D5BFF8BC18836A6C001E74BA /* Build configuration list for PBXNativeTarget "MRubyExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -472,6 +541,7 @@
 				D5BFF8BE18836A6C001E74BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

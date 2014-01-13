@@ -8,7 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate> {
+    IBOutlet NSButton *execScriptButton;
+    IBOutlet NSButton *evalScriptButton;
+    IBOutlet NSButton *instanceEvalButton;
+    IBOutlet NSButton *callMethodChainingButton;
+    IBOutlet NSTextView *textView;
+}
+
+- (void)actionEvalScript;
+- (void)actionInstanceEval;
 
 @property (assign) IBOutlet NSWindow *window;
 
