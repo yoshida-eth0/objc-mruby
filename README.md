@@ -134,3 +134,7 @@ An objc-mruby is mruby wrapper for Objective-C.
         }
     }
 
+## License
+
+MIT
+
