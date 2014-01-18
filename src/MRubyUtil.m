@@ -7,25 +7,89 @@
 //
 
 #import "MRubyUtil.h"
+#import "MRuby.h"
 #import "MRubyBlockInfo.h"
 
 @implementation MRubyUtil
 
-+ (void)mrbInit:(mrb_state *)mrb
+#pragma mark reference count
+
++ (void)mruby:(MRuby *)mruby retain:(mrb_value)obj
 {
-    // GC.disable
-    mrb_funcall(mrb, mrb_obj_value(mrb_class_get(mrb, "GC")), "disable", 0);
+    mrb_state *mrb = [mruby mrb];
+    mrb_value retainPool = [mruby retainPool];
+    mrb_value referenceHash = [mruby referenceHash];
+    mrb_value objId = mrb_fixnum_value(mrb_obj_id(obj));
     
-    // define ObjcBridgeProc class
-    mrb_init_objc_bridge_proc(mrb);
+    // increment reference count
+    mrb_int count = mrb_fixnum(mrb_hash_get(mrb, referenceHash, objId));
+    mrb_hash_set(mrb, referenceHash, objId, mrb_fixnum_value(count + 1));
+    
+    // set retain pool
+    if (count==0) {
+        mrb_hash_set(mrb, retainPool, objId, obj);
+    }
+    
+#if MRubyGCDebugEnabled
+    int poolSize = mrb_fixnum(mrb_funcall(mrb, retainPool, "length", 0));
+    NSLog(@"%s objectId=%d referenceCount=%d poolSize=%d", __func__, mrb_obj_id(obj), count + 1, poolSize);
+#endif
 }
 
-+ (void)mrb:(mrb_state *)mrb setArgv:(NSArray *)args
++ (void)mruby:(MRuby *)mruby release:(mrb_value)obj
 {
-    if (!args) {
-        args = @[];
+    mrb_state *mrb = [mruby mrb];
+    mrb_value retainPool = [mruby retainPool];
+    mrb_value referenceHash = [mruby referenceHash];
+    mrb_value objId = mrb_fixnum_value(mrb_obj_id(obj));
+    
+    mrb_int count = mrb_fixnum(mrb_hash_get(mrb, referenceHash, objId));
+    if (1<count) {
+        // decrement reference count
+        mrb_hash_set(mrb, referenceHash, objId, mrb_fixnum_value(count - 1));
+    } else {
+        // delete reference count
+        mrb_hash_delete_key(mrb, referenceHash, objId);
+        
+        // delete retain pool
+        mrb_hash_delete_key(mrb, retainPool, objId);
     }
-    mrb_define_global_const(mrb, "ARGV", [MRubyUtil mrb:mrb objc2mrb:args]);
+    
+#if MRubyGCDebugEnabled
+    int poolSize = mrb_fixnum(mrb_funcall(mrb, retainPool, "length", 0));
+    NSLog(@"%s objectId=%d referenceCount=%d poolSize=%d", __func__, mrb_obj_id(obj), count - 1, poolSize);
+#endif
+}
+
++ (BOOL)isGcManagedObject:(mrb_value)obj
+{
+    mrb_int tt = mrb_type(obj);
+    
+    switch (tt) {
+        case  MRB_TT_FREE:
+        case  MRB_TT_UNDEF:
+        case  MRB_TT_FALSE:
+        case  MRB_TT_TRUE:
+        case  MRB_TT_SYMBOL:
+        case  MRB_TT_FIXNUM:
+        case  MRB_TT_FLOAT:
+            return FALSE;
+        case  MRB_TT_STRING:
+        case  MRB_TT_OBJECT:
+        case  MRB_TT_CLASS:
+        case  MRB_TT_MODULE:
+        case  MRB_TT_ICLASS:
+        case  MRB_TT_SCLASS:
+        case  MRB_TT_PROC:
+        case  MRB_TT_ARRAY:
+        case  MRB_TT_HASH:
+        case  MRB_TT_RANGE:
+        case  MRB_TT_EXCEPTION:
+        case  MRB_TT_FILE:
+        case  MRB_TT_DATA:
+        default:
+            return TRUE;
+    }
 }
 
 
@@ -48,6 +112,9 @@
     mrb_value val = mrb_load_string_cxt(mrb, [code UTF8String], c);
     mrbc_context_free(mrb, c);
     
+#if MRubyEvalDebugEnabled
+    NSLog(@"%s eval=%@ ret=%@", __func__, code, [self mrb:mrb mrb2objc:val]);
+#endif
     [self mrbRaiseUncaughtException:mrb];
     
     return val;
@@ -104,7 +171,9 @@
                 return mrb_float_value(mrb, (mrb_float)[(NSNumber*)o doubleValue]);
                 break;
             default:
-                NSLog(@"Unsupported CFNumberType: %d", (int)CFNumberGetType((CFNumberRef)o));
+#if MRubyConvertDebugEnabled
+                NSLog(@"%s Unsupported CFNumberType: %d", __func__, (int)CFNumberGetType((CFNumberRef)o));
+#endif
                 break;
         }
     } else if ([o isKindOfClass:[NSString class]]) {
@@ -122,7 +191,9 @@
         }
         return hash;
     } else {
-        NSLog(@"Unsupported Class: %@", [o class]);
+#if MRubyConvertDebugEnabled
+        NSLog(@"%s Unsupported Class: %@", __func__, [o class]);
+#endif
     }
     return mrb_nil_value();
 }
@@ -151,8 +222,6 @@
                 break;
             case MRB_TT_FLOAT:
                 ret = [NSNumber numberWithDouble:(mrb_float)mrb_float(o)];
-                break;
-            case MRB_TT_PROC:
                 break;
             case MRB_TT_ARRAY:{
                 NSMutableArray *ary = [NSMutableArray arrayWithCapacity:RARRAY_LEN(o)];
@@ -211,12 +280,16 @@
                     ret = [NSException exceptionWithName:className reason:message userInfo:userInfo];
                 } else {
                     // Unsupported class
-                    NSLog(@"Unsupported class: %@", (NSString *)[self mrb:mrb mrb2objc:mrb_funcall(mrb, mrb_funcall(mrb, o, "class", 0), "to_s", 0)]);
+#if MRubyConvertDebugEnabled
+                    NSLog(@"%s Unsupported class: %@", __func__, (NSString *)[self mrb:mrb mrb2objc:mrb_funcall(mrb, mrb_funcall(mrb, o, "class", 0), "to_s", 0)]);
+#endif
                 }
                 break;
             }
             default:
-                NSLog(@"Unsupported mrb_vtype: %d", mrb_type(o));
+#if MRubyConvertDebugEnabled
+                NSLog(@"%s Unsupported mrb_vtype: %d", __func__, mrb_type(o));
+#endif
                 break;
         }
         

@@ -12,12 +12,16 @@
 
 @interface MRuby : NSObject {
     mrb_state *mrb;
+    mrb_value retainPool;
+    mrb_value referenceHash;
     NSString *filename;
     NSMutableArray *loadPath;
 }
 
+// const
+- (void)setConst:(NSObject *)value withKey:(NSString *)key;
+
 // exec
-- (void)setArgv:(NSArray *)argv;
 - (MRubyValue *)require:(NSString *)filePath;
 - (MRubyValue *)exec:(NSString *)filePath withArgs:(NSArray *)args;
 
@@ -28,6 +32,8 @@
 - (MRubyValue *)value:(NSObject *)object;
 
 @property (nonatomic, assign, readonly) mrb_state *mrb;
+@property (nonatomic, assign, readonly) mrb_value retainPool;
+@property (nonatomic, assign, readonly) mrb_value referenceHash;
 @property (nonatomic, copy, readwrite) NSString *filename;
 @property (nonatomic, strong, readonly) NSMutableArray *loadPath;
 

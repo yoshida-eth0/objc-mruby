@@ -20,10 +20,12 @@ typedef NSObject* (^MRubyBlock)(MRubyValue *args);
 @interface MRubyValue : NSObject {
     MRuby *mruby;
     mrb_value _self;
+    BOOL isGcManaged;
 }
 
 - (id)initWithObject:(NSObject *)object withMRuby:(MRuby *)mruby;
 - (id)initWithValue:(mrb_value)value withMRuby:(MRuby *)mruby;
+- (id)initWithValue:(mrb_value)value withMRuby:(MRuby *)mruby withRetain:(BOOL)retain;
 
 - (MRubyValue *)eval:(NSString *)code;
 

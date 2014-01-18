@@ -31,12 +31,28 @@
 
 - (id)initWithValue:(mrb_value)value withMRuby:(MRuby *)_mruby
 {
+    return [self initWithValue:value withMRuby:_mruby withRetain:TRUE];
+}
+
+- (id)initWithValue:(mrb_value)value withMRuby:(MRuby *)_mruby withRetain:(BOOL)retain
+{
     self = [super init];
     if (self) {
         self.mruby = _mruby;
         self._self = value;
+        isGcManaged = retain && [MRubyUtil isGcManagedObject:_self];
+        if (isGcManaged) {
+            [MRubyUtil mruby:mruby retain:_self];
+        }
     }
     return self;
+}
+
+- (void)dealloc
+{
+    if (isGcManaged) {
+        [MRubyUtil mruby:mruby release:_self];
+    }
 }
 
 
@@ -49,10 +65,7 @@
     NSString *procCode = [NSString stringWithFormat:@"Proc.new{%@}", code];
     mrb_value proc = [MRubyUtil mrb:mrb eval:procCode];
     
-    mrb_value ret = mrb_funcall_with_block(mrb, _self, mrb_intern_cstr(mrb, "instance_eval"), 0, NULL, proc);
-    [MRubyUtil mrbRaiseUncaughtException:mrb];
-    
-    return [[[self class] alloc] initWithValue:ret withMRuby:mruby];
+    return [self send:@"instance_eval" proc:[[[self class] alloc] initWithValue:proc withMRuby:mruby withRetain:FALSE]];
 }
 
 
@@ -92,7 +105,7 @@
     
     @try {
         // send
-        return [self send:method args:args proc:[[[self class] alloc] initWithValue:proc withMRuby:mruby]];
+        return [self send:method args:args proc:[[[self class] alloc] initWithValue:proc withMRuby:mruby withRetain:FALSE]];
     }
     @finally {
         // pop block info
@@ -112,9 +125,16 @@
     mrb_state *mrb = [mruby mrb];
     mrb_value proc = mrb_nil_value();
     
+#if MRubySendDebugEnabled
+    NSLog(@"%s method=%@ argc=%ld block_given?=%d", __func__, method, [args count], block && !mrb_nil_p([block toMRb]));
+#endif
+    
     // to proc
     if (block && !mrb_nil_p([block toMRb])) {
-        proc = [[block send:@"to_proc"] toMRb];
+        if ([block toMRb].tt!=MRB_TT_PROC) {
+            block = [block send:@"to_proc"];
+        }
+        proc = [block toMRb];
     }
     
     // argv

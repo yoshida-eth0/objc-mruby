@@ -7,3 +7,8 @@
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
 #endif
+
+#define MRubyGCDebugEnabled 1
+#define MRubySendDebugEnabled 1
+#define MRubyEvalDebugEnabled 1
+#define MRubyConvertDebugEnabled 1

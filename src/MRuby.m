@@ -20,6 +20,8 @@
 
 @implementation MRuby
 @synthesize mrb;
+@synthesize retainPool;
+@synthesize referenceHash;
 @synthesize filename;
 @synthesize loadPath;
 
@@ -28,8 +30,19 @@
     self = [super init];
     if (self) {
         mrb = mrb_open();
-        [MRubyUtil mrbInit:mrb];
         
+        // define ObjcBridgeProc class
+        mrb_init_objc_bridge_proc(mrb);
+        
+        // init retain pool
+        retainPool = mrb_hash_new(mrb);
+        mrb_gc_protect(mrb, retainPool);
+        
+        // init reference count hash
+        referenceHash = mrb_hash_new(mrb);
+        mrb_gc_protect(mrb, referenceHash);
+        
+        // set default load path
         self.loadPath = [NSMutableArray array];
         [self.loadPath addObject:[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents/Resources"]];
     }
@@ -45,15 +58,18 @@
 }
 
 
-#pragma mark exec
+#pragma mark const
 
-- (void)setArgv:(NSArray *)argv
+- (void)setConst:(NSObject *)value withKey:(NSString *)key
 {
-    if (!argv) {
-        argv = @[];
+    if (!key) {
+        [NSException exceptionWithName:@"KeyRequired" reason:@"key is required" userInfo:nil];
     }
-    mrb_define_global_const(mrb, "ARGV", [MRubyUtil mrb:mrb objc2mrb:argv]);
+    mrb_define_global_const(mrb, [key UTF8String], [MRubyUtil mrb:mrb objc2mrb:value]);
 }
+
+
+#pragma mark exec
 
 - (MRubyValue *)require:(NSString *)filePath
 {
@@ -89,7 +105,7 @@
 - (MRubyValue *)exec:(NSString *)filePath withArgs:(NSArray *)args
 {
     [self setFilename:filePath];
-    [self setArgv:args];
+    [self setConst:(args ? args : @[]) withKey:@"ARGV"];
     return [self require:filePath];
 }
 
